@@ -245,17 +245,17 @@ void AES256RoundInPlace(uint4 *aesinout, uint *ExpandedKey)
 }
 
 #else
-void AES256RoundInPlace2(ulong *Input, const uint *Key, __local uint *LAESTable1, __local uint *LAESTable2, __local uint *LAESTable3, __local uint *LAESTable4)
+void AES256RoundInPlace2(ulong *Input, const uint *Key)
 {
 	uchar tmp[16];
 	
 	((ulong *)tmp)[0] = Input[0];
 	((ulong *)tmp)[1] = Input[1];
 	
-	Input[0] = LAESTable1[tmp[0]] ^ LAESTable2[tmp[5]] ^ LAESTable3[tmp[10]] ^ LAESTable4[tmp[15]] ^ Key[0];
-	Input[1] = LAESTable4[tmp[3]] ^ LAESTable1[tmp[4]] ^ LAESTable2[tmp[9]] ^ LAESTable3[tmp[14]] ^ Key[1];
-	Input[2] = LAESTable3[tmp[2]] ^ LAESTable4[tmp[7]] ^ LAESTable1[tmp[8]] ^ LAESTable2[tmp[13]] ^ Key[2];
-	Input[3] = LAESTable2[tmp[1]] ^ LAESTable3[tmp[6]] ^ LAESTable4[tmp[11]] ^ LAESTable1[tmp[12]] ^ Key[3];
+	Input[0] = AESTable1[tmp[0]] ^ AESTable2[tmp[5]] ^ AESTable3[tmp[10]] ^ AESTable4[tmp[15]] ^ Key[0];
+	Input[1] = AESTable4[tmp[3]] ^ AESTable1[tmp[4]] ^ AESTable2[tmp[9]] ^ AESTable3[tmp[14]] ^ Key[1];
+	Input[2] = AESTable3[tmp[2]] ^ AESTable4[tmp[7]] ^ AESTable1[tmp[8]] ^ AESTable2[tmp[13]] ^ Key[2];
+	Input[3] = AESTable2[tmp[1]] ^ AESTable3[tmp[6]] ^ AESTable4[tmp[11]] ^ AESTable1[tmp[12]] ^ Key[3];
 }
 #endif
 
