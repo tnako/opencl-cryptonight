@@ -80,10 +80,7 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 bin_PROGRAMS = minerd$(EXEEXT)
-@ARCH_x86_TRUE@am__append_1 = sha2-x86.S scrypt-x86.S aesb-x86.S
-@ARCH_x86_64_TRUE@am__append_2 = sha2-x64.S scrypt-x64.S aesb-x64.S
-@ARCH_ARM_TRUE@am__append_3 = sha2-arm.S scrypt-arm.S
-@HAVE_WINDOWS_TRUE@am__append_4 = -Wl,--stack,10485760
+@HAVE_WINDOWS_TRUE@am__append_1 = -Wl,--stack,10485760
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
@@ -102,49 +99,15 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(man1dir)"
 PROGRAMS = $(bin_PROGRAMS)
-am__minerd_SOURCES_DIST = elist.h miner.h compat.h cpu-miner.c util.c \
-	sha2.c scrypt.c keccak.c heavy.c quark.c skein.c ink.c blake.c \
-	cryptonight_common.c cryptonight_opencl.c x11.c \
-	sha3/sph_keccak.c sha3/sph_hefty1.c sha3/sph_groestl.c \
-	sha3/sph_skein.c sha3/sph_bmw.c sha3/sph_jh.c \
-	sha3/sph_shavite.c sha3/sph_blake.c sha3/sph_luffa.c \
-	sha3/sph_cubehash.c sha3/sph_simd.c sha3/sph_echo.c \
-	crypto/oaes_lib.c crypto/c_keccak.c crypto/c_groestl.c \
-	crypto/c_blake256.c crypto/c_jh.c crypto/c_skein.c \
-	crypto/hash.c crypto/aesb.c sha2-x86.S scrypt-x86.S aesb-x86.S \
-	sha2-x64.S scrypt-x64.S aesb-x64.S sha2-arm.S scrypt-arm.S
 am__dirstamp = $(am__leading_dot)dirstamp
-@ARCH_x86_TRUE@am__objects_1 = minerd-sha2-x86.$(OBJEXT) \
-@ARCH_x86_TRUE@	minerd-scrypt-x86.$(OBJEXT) \
-@ARCH_x86_TRUE@	minerd-aesb-x86.$(OBJEXT)
-@ARCH_x86_64_TRUE@am__objects_2 = minerd-sha2-x64.$(OBJEXT) \
-@ARCH_x86_64_TRUE@	minerd-scrypt-x64.$(OBJEXT) \
-@ARCH_x86_64_TRUE@	minerd-aesb-x64.$(OBJEXT)
-@ARCH_ARM_TRUE@am__objects_3 = minerd-sha2-arm.$(OBJEXT) \
-@ARCH_ARM_TRUE@	minerd-scrypt-arm.$(OBJEXT)
 am_minerd_OBJECTS = minerd-cpu-miner.$(OBJEXT) minerd-util.$(OBJEXT) \
-	minerd-sha2.$(OBJEXT) minerd-scrypt.$(OBJEXT) \
-	minerd-keccak.$(OBJEXT) minerd-heavy.$(OBJEXT) \
-	minerd-quark.$(OBJEXT) minerd-skein.$(OBJEXT) \
-	minerd-ink.$(OBJEXT) minerd-blake.$(OBJEXT) \
 	minerd-cryptonight_common.$(OBJEXT) \
-	minerd-cryptonight_opencl.$(OBJEXT) minerd-x11.$(OBJEXT) \
-	sha3/minerd-sph_keccak.$(OBJEXT) \
-	sha3/minerd-sph_hefty1.$(OBJEXT) \
-	sha3/minerd-sph_groestl.$(OBJEXT) \
-	sha3/minerd-sph_skein.$(OBJEXT) sha3/minerd-sph_bmw.$(OBJEXT) \
-	sha3/minerd-sph_jh.$(OBJEXT) sha3/minerd-sph_shavite.$(OBJEXT) \
-	sha3/minerd-sph_blake.$(OBJEXT) \
-	sha3/minerd-sph_luffa.$(OBJEXT) \
-	sha3/minerd-sph_cubehash.$(OBJEXT) \
-	sha3/minerd-sph_simd.$(OBJEXT) sha3/minerd-sph_echo.$(OBJEXT) \
-	crypto/minerd-oaes_lib.$(OBJEXT) \
+	minerd-cryptonight_opencl.$(OBJEXT) \
 	crypto/minerd-c_keccak.$(OBJEXT) \
 	crypto/minerd-c_groestl.$(OBJEXT) \
 	crypto/minerd-c_blake256.$(OBJEXT) \
 	crypto/minerd-c_jh.$(OBJEXT) crypto/minerd-c_skein.$(OBJEXT) \
-	crypto/minerd-hash.$(OBJEXT) crypto/minerd-aesb.$(OBJEXT) \
-	$(am__objects_1) $(am__objects_2) $(am__objects_3)
+	crypto/minerd-hash.$(OBJEXT) crypto/minerd-aesb.$(OBJEXT)
 minerd_OBJECTS = $(am_minerd_OBJECTS)
 minerd_DEPENDENCIES =
 minerd_LINK = $(CCLD) $(minerd_CFLAGS) $(CFLAGS) $(minerd_LDFLAGS) \
@@ -169,12 +132,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
-AM_V_CPPAS = $(am__v_CPPAS_@AM_V@)
-am__v_CPPAS_ = $(am__v_CPPAS_@AM_DEFAULT_V@)
-am__v_CPPAS_0 = @echo "  CPPAS   " $@;
-am__v_CPPAS_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -188,7 +145,7 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(minerd_SOURCES)
-DIST_SOURCES = $(am__minerd_SOURCES_DIST)
+DIST_SOURCES = $(minerd_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
 	ctags-recursive dvi-recursive html-recursive info-recursive \
 	install-data-recursive install-dvi-recursive \
@@ -426,26 +383,30 @@ AM_CPPFLAGS = $(PTHREAD_FLAGS) $(JANSSON_INCLUDES)
 #AM_CFLAGS	= -Ofast -flto -fuse-linker-plugin -funroll-loops -fvariable-expansion-in-unroller -falign-loops=16 -falign-functions=16 -falign-jumps=16 -maes
 AM_CFLAGS = -ggdb -g3 -maes
 dist_man_MANS = minerd.1
-minerd_SOURCES = elist.h miner.h compat.h cpu-miner.c util.c sha2.c \
-	scrypt.c keccak.c heavy.c quark.c skein.c ink.c blake.c \
-	cryptonight_common.c cryptonight_opencl.c x11.c \
-	sha3/sph_keccak.c sha3/sph_hefty1.c sha3/sph_groestl.c \
-	sha3/sph_skein.c sha3/sph_bmw.c sha3/sph_jh.c \
-	sha3/sph_shavite.c sha3/sph_blake.c sha3/sph_luffa.c \
-	sha3/sph_cubehash.c sha3/sph_simd.c sha3/sph_echo.c \
-	crypto/oaes_lib.c crypto/c_keccak.c crypto/c_groestl.c \
-	crypto/c_blake256.c crypto/c_jh.c crypto/c_skein.c \
-	crypto/hash.c crypto/aesb.c $(am__append_1) $(am__append_2) \
-	$(am__append_3)
+minerd_SOURCES = elist.h \
+		  miner.h \
+		  compat.h \
+		  cpu-miner.c \
+		  util.c \
+		  cryptonight_common.c \
+		  cryptonight_opencl.c \
+		  crypto/c_keccak.c \
+		  crypto/c_groestl.c \
+		  crypto/c_blake256.c \
+		  crypto/c_jh.c \
+		  crypto/c_skein.c \
+		  crypto/hash.c \
+		  crypto/aesb.c
+
 minerd_LDFLAGS = $(AM_LDFLAGS) -lOpenCL
 minerd_LDADD = @LIBCURL@ @JANSSON_LIBS@ @PTHREAD_LIBS@ @WS2_LIBS@
 minerd_CPPFLAGS = $(AM_CPPFLAGS) @LIBCURL_CPPFLAGS@
-minerd_CFLAGS = $(AM_CFLAGS) $(am__append_4)
+minerd_CFLAGS = $(AM_CFLAGS) $(am__append_1)
 all: cpuminer-config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .S .c .o .obj
+.SUFFIXES: .c .o .obj
 am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -537,44 +498,12 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-sha3/$(am__dirstamp):
-	@$(MKDIR_P) sha3
-	@: > sha3/$(am__dirstamp)
-sha3/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) sha3/$(DEPDIR)
-	@: > sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_keccak.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_hefty1.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_groestl.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_skein.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_bmw.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_jh.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_shavite.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_blake.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_luffa.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_cubehash.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_simd.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
-sha3/minerd-sph_echo.$(OBJEXT): sha3/$(am__dirstamp) \
-	sha3/$(DEPDIR)/$(am__dirstamp)
 crypto/$(am__dirstamp):
 	@$(MKDIR_P) crypto
 	@: > crypto/$(am__dirstamp)
 crypto/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) crypto/$(DEPDIR)
 	@: > crypto/$(DEPDIR)/$(am__dirstamp)
-crypto/minerd-oaes_lib.$(OBJEXT): crypto/$(am__dirstamp) \
-	crypto/$(DEPDIR)/$(am__dirstamp)
 crypto/minerd-c_keccak.$(OBJEXT): crypto/$(am__dirstamp) \
 	crypto/$(DEPDIR)/$(am__dirstamp)
 crypto/minerd-c_groestl.$(OBJEXT): crypto/$(am__dirstamp) \
@@ -597,32 +526,14 @@ minerd$(EXEEXT): $(minerd_OBJECTS) $(minerd_DEPENDENCIES) $(EXTRA_minerd_DEPENDE
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f crypto/*.$(OBJEXT)
-	-rm -f sha3/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-aesb-x64.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-aesb-x86.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-blake.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-cpu-miner.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-cryptonight_common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-cryptonight_opencl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-heavy.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-ink.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-keccak.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-quark.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-scrypt-arm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-scrypt-x64.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-scrypt-x86.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-scrypt.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-sha2-arm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-sha2-x64.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-sha2-x86.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-sha2.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-skein.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-util.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/minerd-x11.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-aesb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-c_blake256.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-c_groestl.Po@am__quote@
@@ -630,147 +541,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-c_keccak.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-c_skein.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-hash.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@crypto/$(DEPDIR)/minerd-oaes_lib.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_blake.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_bmw.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_cubehash.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_echo.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_groestl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_hefty1.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_jh.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_keccak.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_luffa.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_shavite.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_simd.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@sha3/$(DEPDIR)/minerd-sph_skein.Po@am__quote@
-
-.S.o:
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
-@am__fastdepCCAS_TRUE@	$(CPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
-@am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ $<
-
-.S.obj:
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
-@am__fastdepCCAS_TRUE@	$(CPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
-@am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-minerd-sha2-x86.o: sha2-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-x86.o -MD -MP -MF $(DEPDIR)/minerd-sha2-x86.Tpo -c -o minerd-sha2-x86.o `test -f 'sha2-x86.S' || echo '$(srcdir)/'`sha2-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-x86.Tpo $(DEPDIR)/minerd-sha2-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-x86.S' object='minerd-sha2-x86.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-x86.o `test -f 'sha2-x86.S' || echo '$(srcdir)/'`sha2-x86.S
-
-minerd-sha2-x86.obj: sha2-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-x86.obj -MD -MP -MF $(DEPDIR)/minerd-sha2-x86.Tpo -c -o minerd-sha2-x86.obj `if test -f 'sha2-x86.S'; then $(CYGPATH_W) 'sha2-x86.S'; else $(CYGPATH_W) '$(srcdir)/sha2-x86.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-x86.Tpo $(DEPDIR)/minerd-sha2-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-x86.S' object='minerd-sha2-x86.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-x86.obj `if test -f 'sha2-x86.S'; then $(CYGPATH_W) 'sha2-x86.S'; else $(CYGPATH_W) '$(srcdir)/sha2-x86.S'; fi`
-
-minerd-scrypt-x86.o: scrypt-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-x86.o -MD -MP -MF $(DEPDIR)/minerd-scrypt-x86.Tpo -c -o minerd-scrypt-x86.o `test -f 'scrypt-x86.S' || echo '$(srcdir)/'`scrypt-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-x86.Tpo $(DEPDIR)/minerd-scrypt-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-x86.S' object='minerd-scrypt-x86.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-x86.o `test -f 'scrypt-x86.S' || echo '$(srcdir)/'`scrypt-x86.S
-
-minerd-scrypt-x86.obj: scrypt-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-x86.obj -MD -MP -MF $(DEPDIR)/minerd-scrypt-x86.Tpo -c -o minerd-scrypt-x86.obj `if test -f 'scrypt-x86.S'; then $(CYGPATH_W) 'scrypt-x86.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-x86.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-x86.Tpo $(DEPDIR)/minerd-scrypt-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-x86.S' object='minerd-scrypt-x86.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-x86.obj `if test -f 'scrypt-x86.S'; then $(CYGPATH_W) 'scrypt-x86.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-x86.S'; fi`
-
-minerd-aesb-x86.o: aesb-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-aesb-x86.o -MD -MP -MF $(DEPDIR)/minerd-aesb-x86.Tpo -c -o minerd-aesb-x86.o `test -f 'aesb-x86.S' || echo '$(srcdir)/'`aesb-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-aesb-x86.Tpo $(DEPDIR)/minerd-aesb-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='aesb-x86.S' object='minerd-aesb-x86.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-aesb-x86.o `test -f 'aesb-x86.S' || echo '$(srcdir)/'`aesb-x86.S
-
-minerd-aesb-x86.obj: aesb-x86.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-aesb-x86.obj -MD -MP -MF $(DEPDIR)/minerd-aesb-x86.Tpo -c -o minerd-aesb-x86.obj `if test -f 'aesb-x86.S'; then $(CYGPATH_W) 'aesb-x86.S'; else $(CYGPATH_W) '$(srcdir)/aesb-x86.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-aesb-x86.Tpo $(DEPDIR)/minerd-aesb-x86.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='aesb-x86.S' object='minerd-aesb-x86.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-aesb-x86.obj `if test -f 'aesb-x86.S'; then $(CYGPATH_W) 'aesb-x86.S'; else $(CYGPATH_W) '$(srcdir)/aesb-x86.S'; fi`
-
-minerd-sha2-x64.o: sha2-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-x64.o -MD -MP -MF $(DEPDIR)/minerd-sha2-x64.Tpo -c -o minerd-sha2-x64.o `test -f 'sha2-x64.S' || echo '$(srcdir)/'`sha2-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-x64.Tpo $(DEPDIR)/minerd-sha2-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-x64.S' object='minerd-sha2-x64.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-x64.o `test -f 'sha2-x64.S' || echo '$(srcdir)/'`sha2-x64.S
-
-minerd-sha2-x64.obj: sha2-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-x64.obj -MD -MP -MF $(DEPDIR)/minerd-sha2-x64.Tpo -c -o minerd-sha2-x64.obj `if test -f 'sha2-x64.S'; then $(CYGPATH_W) 'sha2-x64.S'; else $(CYGPATH_W) '$(srcdir)/sha2-x64.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-x64.Tpo $(DEPDIR)/minerd-sha2-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-x64.S' object='minerd-sha2-x64.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-x64.obj `if test -f 'sha2-x64.S'; then $(CYGPATH_W) 'sha2-x64.S'; else $(CYGPATH_W) '$(srcdir)/sha2-x64.S'; fi`
-
-minerd-scrypt-x64.o: scrypt-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-x64.o -MD -MP -MF $(DEPDIR)/minerd-scrypt-x64.Tpo -c -o minerd-scrypt-x64.o `test -f 'scrypt-x64.S' || echo '$(srcdir)/'`scrypt-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-x64.Tpo $(DEPDIR)/minerd-scrypt-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-x64.S' object='minerd-scrypt-x64.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-x64.o `test -f 'scrypt-x64.S' || echo '$(srcdir)/'`scrypt-x64.S
-
-minerd-scrypt-x64.obj: scrypt-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-x64.obj -MD -MP -MF $(DEPDIR)/minerd-scrypt-x64.Tpo -c -o minerd-scrypt-x64.obj `if test -f 'scrypt-x64.S'; then $(CYGPATH_W) 'scrypt-x64.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-x64.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-x64.Tpo $(DEPDIR)/minerd-scrypt-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-x64.S' object='minerd-scrypt-x64.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-x64.obj `if test -f 'scrypt-x64.S'; then $(CYGPATH_W) 'scrypt-x64.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-x64.S'; fi`
-
-minerd-aesb-x64.o: aesb-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-aesb-x64.o -MD -MP -MF $(DEPDIR)/minerd-aesb-x64.Tpo -c -o minerd-aesb-x64.o `test -f 'aesb-x64.S' || echo '$(srcdir)/'`aesb-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-aesb-x64.Tpo $(DEPDIR)/minerd-aesb-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='aesb-x64.S' object='minerd-aesb-x64.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-aesb-x64.o `test -f 'aesb-x64.S' || echo '$(srcdir)/'`aesb-x64.S
-
-minerd-aesb-x64.obj: aesb-x64.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-aesb-x64.obj -MD -MP -MF $(DEPDIR)/minerd-aesb-x64.Tpo -c -o minerd-aesb-x64.obj `if test -f 'aesb-x64.S'; then $(CYGPATH_W) 'aesb-x64.S'; else $(CYGPATH_W) '$(srcdir)/aesb-x64.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-aesb-x64.Tpo $(DEPDIR)/minerd-aesb-x64.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='aesb-x64.S' object='minerd-aesb-x64.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-aesb-x64.obj `if test -f 'aesb-x64.S'; then $(CYGPATH_W) 'aesb-x64.S'; else $(CYGPATH_W) '$(srcdir)/aesb-x64.S'; fi`
-
-minerd-sha2-arm.o: sha2-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-arm.o -MD -MP -MF $(DEPDIR)/minerd-sha2-arm.Tpo -c -o minerd-sha2-arm.o `test -f 'sha2-arm.S' || echo '$(srcdir)/'`sha2-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-arm.Tpo $(DEPDIR)/minerd-sha2-arm.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-arm.S' object='minerd-sha2-arm.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-arm.o `test -f 'sha2-arm.S' || echo '$(srcdir)/'`sha2-arm.S
-
-minerd-sha2-arm.obj: sha2-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-sha2-arm.obj -MD -MP -MF $(DEPDIR)/minerd-sha2-arm.Tpo -c -o minerd-sha2-arm.obj `if test -f 'sha2-arm.S'; then $(CYGPATH_W) 'sha2-arm.S'; else $(CYGPATH_W) '$(srcdir)/sha2-arm.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2-arm.Tpo $(DEPDIR)/minerd-sha2-arm.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='sha2-arm.S' object='minerd-sha2-arm.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-sha2-arm.obj `if test -f 'sha2-arm.S'; then $(CYGPATH_W) 'sha2-arm.S'; else $(CYGPATH_W) '$(srcdir)/sha2-arm.S'; fi`
-
-minerd-scrypt-arm.o: scrypt-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-arm.o -MD -MP -MF $(DEPDIR)/minerd-scrypt-arm.Tpo -c -o minerd-scrypt-arm.o `test -f 'scrypt-arm.S' || echo '$(srcdir)/'`scrypt-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-arm.Tpo $(DEPDIR)/minerd-scrypt-arm.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-arm.S' object='minerd-scrypt-arm.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-arm.o `test -f 'scrypt-arm.S' || echo '$(srcdir)/'`scrypt-arm.S
-
-minerd-scrypt-arm.obj: scrypt-arm.S
-@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -MT minerd-scrypt-arm.obj -MD -MP -MF $(DEPDIR)/minerd-scrypt-arm.Tpo -c -o minerd-scrypt-arm.obj `if test -f 'scrypt-arm.S'; then $(CYGPATH_W) 'scrypt-arm.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-arm.S'; fi`
-@am__fastdepCCAS_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt-arm.Tpo $(DEPDIR)/minerd-scrypt-arm.Po
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='scrypt-arm.S' object='minerd-scrypt-arm.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o minerd-scrypt-arm.obj `if test -f 'scrypt-arm.S'; then $(CYGPATH_W) 'scrypt-arm.S'; else $(CYGPATH_W) '$(srcdir)/scrypt-arm.S'; fi`
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -816,118 +586,6 @@ minerd-util.obj: util.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-util.obj `if test -f 'util.c'; then $(CYGPATH_W) 'util.c'; else $(CYGPATH_W) '$(srcdir)/util.c'; fi`
 
-minerd-sha2.o: sha2.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-sha2.o -MD -MP -MF $(DEPDIR)/minerd-sha2.Tpo -c -o minerd-sha2.o `test -f 'sha2.c' || echo '$(srcdir)/'`sha2.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2.Tpo $(DEPDIR)/minerd-sha2.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha2.c' object='minerd-sha2.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-sha2.o `test -f 'sha2.c' || echo '$(srcdir)/'`sha2.c
-
-minerd-sha2.obj: sha2.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-sha2.obj -MD -MP -MF $(DEPDIR)/minerd-sha2.Tpo -c -o minerd-sha2.obj `if test -f 'sha2.c'; then $(CYGPATH_W) 'sha2.c'; else $(CYGPATH_W) '$(srcdir)/sha2.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-sha2.Tpo $(DEPDIR)/minerd-sha2.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha2.c' object='minerd-sha2.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-sha2.obj `if test -f 'sha2.c'; then $(CYGPATH_W) 'sha2.c'; else $(CYGPATH_W) '$(srcdir)/sha2.c'; fi`
-
-minerd-scrypt.o: scrypt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-scrypt.o -MD -MP -MF $(DEPDIR)/minerd-scrypt.Tpo -c -o minerd-scrypt.o `test -f 'scrypt.c' || echo '$(srcdir)/'`scrypt.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt.Tpo $(DEPDIR)/minerd-scrypt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='scrypt.c' object='minerd-scrypt.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-scrypt.o `test -f 'scrypt.c' || echo '$(srcdir)/'`scrypt.c
-
-minerd-scrypt.obj: scrypt.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-scrypt.obj -MD -MP -MF $(DEPDIR)/minerd-scrypt.Tpo -c -o minerd-scrypt.obj `if test -f 'scrypt.c'; then $(CYGPATH_W) 'scrypt.c'; else $(CYGPATH_W) '$(srcdir)/scrypt.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-scrypt.Tpo $(DEPDIR)/minerd-scrypt.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='scrypt.c' object='minerd-scrypt.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-scrypt.obj `if test -f 'scrypt.c'; then $(CYGPATH_W) 'scrypt.c'; else $(CYGPATH_W) '$(srcdir)/scrypt.c'; fi`
-
-minerd-keccak.o: keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-keccak.o -MD -MP -MF $(DEPDIR)/minerd-keccak.Tpo -c -o minerd-keccak.o `test -f 'keccak.c' || echo '$(srcdir)/'`keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-keccak.Tpo $(DEPDIR)/minerd-keccak.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='keccak.c' object='minerd-keccak.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-keccak.o `test -f 'keccak.c' || echo '$(srcdir)/'`keccak.c
-
-minerd-keccak.obj: keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-keccak.obj -MD -MP -MF $(DEPDIR)/minerd-keccak.Tpo -c -o minerd-keccak.obj `if test -f 'keccak.c'; then $(CYGPATH_W) 'keccak.c'; else $(CYGPATH_W) '$(srcdir)/keccak.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-keccak.Tpo $(DEPDIR)/minerd-keccak.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='keccak.c' object='minerd-keccak.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-keccak.obj `if test -f 'keccak.c'; then $(CYGPATH_W) 'keccak.c'; else $(CYGPATH_W) '$(srcdir)/keccak.c'; fi`
-
-minerd-heavy.o: heavy.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-heavy.o -MD -MP -MF $(DEPDIR)/minerd-heavy.Tpo -c -o minerd-heavy.o `test -f 'heavy.c' || echo '$(srcdir)/'`heavy.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-heavy.Tpo $(DEPDIR)/minerd-heavy.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='heavy.c' object='minerd-heavy.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-heavy.o `test -f 'heavy.c' || echo '$(srcdir)/'`heavy.c
-
-minerd-heavy.obj: heavy.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-heavy.obj -MD -MP -MF $(DEPDIR)/minerd-heavy.Tpo -c -o minerd-heavy.obj `if test -f 'heavy.c'; then $(CYGPATH_W) 'heavy.c'; else $(CYGPATH_W) '$(srcdir)/heavy.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-heavy.Tpo $(DEPDIR)/minerd-heavy.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='heavy.c' object='minerd-heavy.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-heavy.obj `if test -f 'heavy.c'; then $(CYGPATH_W) 'heavy.c'; else $(CYGPATH_W) '$(srcdir)/heavy.c'; fi`
-
-minerd-quark.o: quark.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-quark.o -MD -MP -MF $(DEPDIR)/minerd-quark.Tpo -c -o minerd-quark.o `test -f 'quark.c' || echo '$(srcdir)/'`quark.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-quark.Tpo $(DEPDIR)/minerd-quark.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='quark.c' object='minerd-quark.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-quark.o `test -f 'quark.c' || echo '$(srcdir)/'`quark.c
-
-minerd-quark.obj: quark.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-quark.obj -MD -MP -MF $(DEPDIR)/minerd-quark.Tpo -c -o minerd-quark.obj `if test -f 'quark.c'; then $(CYGPATH_W) 'quark.c'; else $(CYGPATH_W) '$(srcdir)/quark.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-quark.Tpo $(DEPDIR)/minerd-quark.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='quark.c' object='minerd-quark.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-quark.obj `if test -f 'quark.c'; then $(CYGPATH_W) 'quark.c'; else $(CYGPATH_W) '$(srcdir)/quark.c'; fi`
-
-minerd-skein.o: skein.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-skein.o -MD -MP -MF $(DEPDIR)/minerd-skein.Tpo -c -o minerd-skein.o `test -f 'skein.c' || echo '$(srcdir)/'`skein.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-skein.Tpo $(DEPDIR)/minerd-skein.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='skein.c' object='minerd-skein.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-skein.o `test -f 'skein.c' || echo '$(srcdir)/'`skein.c
-
-minerd-skein.obj: skein.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-skein.obj -MD -MP -MF $(DEPDIR)/minerd-skein.Tpo -c -o minerd-skein.obj `if test -f 'skein.c'; then $(CYGPATH_W) 'skein.c'; else $(CYGPATH_W) '$(srcdir)/skein.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-skein.Tpo $(DEPDIR)/minerd-skein.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='skein.c' object='minerd-skein.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-skein.obj `if test -f 'skein.c'; then $(CYGPATH_W) 'skein.c'; else $(CYGPATH_W) '$(srcdir)/skein.c'; fi`
-
-minerd-ink.o: ink.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-ink.o -MD -MP -MF $(DEPDIR)/minerd-ink.Tpo -c -o minerd-ink.o `test -f 'ink.c' || echo '$(srcdir)/'`ink.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-ink.Tpo $(DEPDIR)/minerd-ink.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ink.c' object='minerd-ink.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-ink.o `test -f 'ink.c' || echo '$(srcdir)/'`ink.c
-
-minerd-ink.obj: ink.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-ink.obj -MD -MP -MF $(DEPDIR)/minerd-ink.Tpo -c -o minerd-ink.obj `if test -f 'ink.c'; then $(CYGPATH_W) 'ink.c'; else $(CYGPATH_W) '$(srcdir)/ink.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-ink.Tpo $(DEPDIR)/minerd-ink.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='ink.c' object='minerd-ink.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-ink.obj `if test -f 'ink.c'; then $(CYGPATH_W) 'ink.c'; else $(CYGPATH_W) '$(srcdir)/ink.c'; fi`
-
-minerd-blake.o: blake.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-blake.o -MD -MP -MF $(DEPDIR)/minerd-blake.Tpo -c -o minerd-blake.o `test -f 'blake.c' || echo '$(srcdir)/'`blake.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-blake.Tpo $(DEPDIR)/minerd-blake.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='blake.c' object='minerd-blake.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-blake.o `test -f 'blake.c' || echo '$(srcdir)/'`blake.c
-
-minerd-blake.obj: blake.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-blake.obj -MD -MP -MF $(DEPDIR)/minerd-blake.Tpo -c -o minerd-blake.obj `if test -f 'blake.c'; then $(CYGPATH_W) 'blake.c'; else $(CYGPATH_W) '$(srcdir)/blake.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-blake.Tpo $(DEPDIR)/minerd-blake.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='blake.c' object='minerd-blake.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-blake.obj `if test -f 'blake.c'; then $(CYGPATH_W) 'blake.c'; else $(CYGPATH_W) '$(srcdir)/blake.c'; fi`
-
 minerd-cryptonight_common.o: cryptonight_common.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-cryptonight_common.o -MD -MP -MF $(DEPDIR)/minerd-cryptonight_common.Tpo -c -o minerd-cryptonight_common.o `test -f 'cryptonight_common.c' || echo '$(srcdir)/'`cryptonight_common.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-cryptonight_common.Tpo $(DEPDIR)/minerd-cryptonight_common.Po
@@ -955,202 +613,6 @@ minerd-cryptonight_opencl.obj: cryptonight_opencl.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='cryptonight_opencl.c' object='minerd-cryptonight_opencl.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-cryptonight_opencl.obj `if test -f 'cryptonight_opencl.c'; then $(CYGPATH_W) 'cryptonight_opencl.c'; else $(CYGPATH_W) '$(srcdir)/cryptonight_opencl.c'; fi`
-
-minerd-x11.o: x11.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-x11.o -MD -MP -MF $(DEPDIR)/minerd-x11.Tpo -c -o minerd-x11.o `test -f 'x11.c' || echo '$(srcdir)/'`x11.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-x11.Tpo $(DEPDIR)/minerd-x11.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='x11.c' object='minerd-x11.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-x11.o `test -f 'x11.c' || echo '$(srcdir)/'`x11.c
-
-minerd-x11.obj: x11.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT minerd-x11.obj -MD -MP -MF $(DEPDIR)/minerd-x11.Tpo -c -o minerd-x11.obj `if test -f 'x11.c'; then $(CYGPATH_W) 'x11.c'; else $(CYGPATH_W) '$(srcdir)/x11.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/minerd-x11.Tpo $(DEPDIR)/minerd-x11.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='x11.c' object='minerd-x11.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o minerd-x11.obj `if test -f 'x11.c'; then $(CYGPATH_W) 'x11.c'; else $(CYGPATH_W) '$(srcdir)/x11.c'; fi`
-
-sha3/minerd-sph_keccak.o: sha3/sph_keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_keccak.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_keccak.Tpo -c -o sha3/minerd-sph_keccak.o `test -f 'sha3/sph_keccak.c' || echo '$(srcdir)/'`sha3/sph_keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_keccak.Tpo sha3/$(DEPDIR)/minerd-sph_keccak.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_keccak.c' object='sha3/minerd-sph_keccak.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_keccak.o `test -f 'sha3/sph_keccak.c' || echo '$(srcdir)/'`sha3/sph_keccak.c
-
-sha3/minerd-sph_keccak.obj: sha3/sph_keccak.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_keccak.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_keccak.Tpo -c -o sha3/minerd-sph_keccak.obj `if test -f 'sha3/sph_keccak.c'; then $(CYGPATH_W) 'sha3/sph_keccak.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_keccak.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_keccak.Tpo sha3/$(DEPDIR)/minerd-sph_keccak.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_keccak.c' object='sha3/minerd-sph_keccak.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_keccak.obj `if test -f 'sha3/sph_keccak.c'; then $(CYGPATH_W) 'sha3/sph_keccak.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_keccak.c'; fi`
-
-sha3/minerd-sph_hefty1.o: sha3/sph_hefty1.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_hefty1.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_hefty1.Tpo -c -o sha3/minerd-sph_hefty1.o `test -f 'sha3/sph_hefty1.c' || echo '$(srcdir)/'`sha3/sph_hefty1.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_hefty1.Tpo sha3/$(DEPDIR)/minerd-sph_hefty1.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_hefty1.c' object='sha3/minerd-sph_hefty1.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_hefty1.o `test -f 'sha3/sph_hefty1.c' || echo '$(srcdir)/'`sha3/sph_hefty1.c
-
-sha3/minerd-sph_hefty1.obj: sha3/sph_hefty1.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_hefty1.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_hefty1.Tpo -c -o sha3/minerd-sph_hefty1.obj `if test -f 'sha3/sph_hefty1.c'; then $(CYGPATH_W) 'sha3/sph_hefty1.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_hefty1.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_hefty1.Tpo sha3/$(DEPDIR)/minerd-sph_hefty1.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_hefty1.c' object='sha3/minerd-sph_hefty1.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_hefty1.obj `if test -f 'sha3/sph_hefty1.c'; then $(CYGPATH_W) 'sha3/sph_hefty1.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_hefty1.c'; fi`
-
-sha3/minerd-sph_groestl.o: sha3/sph_groestl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_groestl.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_groestl.Tpo -c -o sha3/minerd-sph_groestl.o `test -f 'sha3/sph_groestl.c' || echo '$(srcdir)/'`sha3/sph_groestl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_groestl.Tpo sha3/$(DEPDIR)/minerd-sph_groestl.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_groestl.c' object='sha3/minerd-sph_groestl.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_groestl.o `test -f 'sha3/sph_groestl.c' || echo '$(srcdir)/'`sha3/sph_groestl.c
-
-sha3/minerd-sph_groestl.obj: sha3/sph_groestl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_groestl.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_groestl.Tpo -c -o sha3/minerd-sph_groestl.obj `if test -f 'sha3/sph_groestl.c'; then $(CYGPATH_W) 'sha3/sph_groestl.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_groestl.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_groestl.Tpo sha3/$(DEPDIR)/minerd-sph_groestl.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_groestl.c' object='sha3/minerd-sph_groestl.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_groestl.obj `if test -f 'sha3/sph_groestl.c'; then $(CYGPATH_W) 'sha3/sph_groestl.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_groestl.c'; fi`
-
-sha3/minerd-sph_skein.o: sha3/sph_skein.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_skein.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_skein.Tpo -c -o sha3/minerd-sph_skein.o `test -f 'sha3/sph_skein.c' || echo '$(srcdir)/'`sha3/sph_skein.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_skein.Tpo sha3/$(DEPDIR)/minerd-sph_skein.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_skein.c' object='sha3/minerd-sph_skein.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_skein.o `test -f 'sha3/sph_skein.c' || echo '$(srcdir)/'`sha3/sph_skein.c
-
-sha3/minerd-sph_skein.obj: sha3/sph_skein.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_skein.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_skein.Tpo -c -o sha3/minerd-sph_skein.obj `if test -f 'sha3/sph_skein.c'; then $(CYGPATH_W) 'sha3/sph_skein.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_skein.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_skein.Tpo sha3/$(DEPDIR)/minerd-sph_skein.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_skein.c' object='sha3/minerd-sph_skein.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_skein.obj `if test -f 'sha3/sph_skein.c'; then $(CYGPATH_W) 'sha3/sph_skein.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_skein.c'; fi`
-
-sha3/minerd-sph_bmw.o: sha3/sph_bmw.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_bmw.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_bmw.Tpo -c -o sha3/minerd-sph_bmw.o `test -f 'sha3/sph_bmw.c' || echo '$(srcdir)/'`sha3/sph_bmw.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_bmw.Tpo sha3/$(DEPDIR)/minerd-sph_bmw.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_bmw.c' object='sha3/minerd-sph_bmw.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_bmw.o `test -f 'sha3/sph_bmw.c' || echo '$(srcdir)/'`sha3/sph_bmw.c
-
-sha3/minerd-sph_bmw.obj: sha3/sph_bmw.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_bmw.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_bmw.Tpo -c -o sha3/minerd-sph_bmw.obj `if test -f 'sha3/sph_bmw.c'; then $(CYGPATH_W) 'sha3/sph_bmw.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_bmw.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_bmw.Tpo sha3/$(DEPDIR)/minerd-sph_bmw.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_bmw.c' object='sha3/minerd-sph_bmw.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_bmw.obj `if test -f 'sha3/sph_bmw.c'; then $(CYGPATH_W) 'sha3/sph_bmw.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_bmw.c'; fi`
-
-sha3/minerd-sph_jh.o: sha3/sph_jh.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_jh.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_jh.Tpo -c -o sha3/minerd-sph_jh.o `test -f 'sha3/sph_jh.c' || echo '$(srcdir)/'`sha3/sph_jh.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_jh.Tpo sha3/$(DEPDIR)/minerd-sph_jh.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_jh.c' object='sha3/minerd-sph_jh.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_jh.o `test -f 'sha3/sph_jh.c' || echo '$(srcdir)/'`sha3/sph_jh.c
-
-sha3/minerd-sph_jh.obj: sha3/sph_jh.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_jh.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_jh.Tpo -c -o sha3/minerd-sph_jh.obj `if test -f 'sha3/sph_jh.c'; then $(CYGPATH_W) 'sha3/sph_jh.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_jh.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_jh.Tpo sha3/$(DEPDIR)/minerd-sph_jh.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_jh.c' object='sha3/minerd-sph_jh.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_jh.obj `if test -f 'sha3/sph_jh.c'; then $(CYGPATH_W) 'sha3/sph_jh.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_jh.c'; fi`
-
-sha3/minerd-sph_shavite.o: sha3/sph_shavite.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_shavite.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_shavite.Tpo -c -o sha3/minerd-sph_shavite.o `test -f 'sha3/sph_shavite.c' || echo '$(srcdir)/'`sha3/sph_shavite.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_shavite.Tpo sha3/$(DEPDIR)/minerd-sph_shavite.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_shavite.c' object='sha3/minerd-sph_shavite.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_shavite.o `test -f 'sha3/sph_shavite.c' || echo '$(srcdir)/'`sha3/sph_shavite.c
-
-sha3/minerd-sph_shavite.obj: sha3/sph_shavite.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_shavite.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_shavite.Tpo -c -o sha3/minerd-sph_shavite.obj `if test -f 'sha3/sph_shavite.c'; then $(CYGPATH_W) 'sha3/sph_shavite.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_shavite.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_shavite.Tpo sha3/$(DEPDIR)/minerd-sph_shavite.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_shavite.c' object='sha3/minerd-sph_shavite.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_shavite.obj `if test -f 'sha3/sph_shavite.c'; then $(CYGPATH_W) 'sha3/sph_shavite.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_shavite.c'; fi`
-
-sha3/minerd-sph_blake.o: sha3/sph_blake.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_blake.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_blake.Tpo -c -o sha3/minerd-sph_blake.o `test -f 'sha3/sph_blake.c' || echo '$(srcdir)/'`sha3/sph_blake.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_blake.Tpo sha3/$(DEPDIR)/minerd-sph_blake.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_blake.c' object='sha3/minerd-sph_blake.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_blake.o `test -f 'sha3/sph_blake.c' || echo '$(srcdir)/'`sha3/sph_blake.c
-
-sha3/minerd-sph_blake.obj: sha3/sph_blake.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_blake.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_blake.Tpo -c -o sha3/minerd-sph_blake.obj `if test -f 'sha3/sph_blake.c'; then $(CYGPATH_W) 'sha3/sph_blake.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_blake.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_blake.Tpo sha3/$(DEPDIR)/minerd-sph_blake.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_blake.c' object='sha3/minerd-sph_blake.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_blake.obj `if test -f 'sha3/sph_blake.c'; then $(CYGPATH_W) 'sha3/sph_blake.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_blake.c'; fi`
-
-sha3/minerd-sph_luffa.o: sha3/sph_luffa.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_luffa.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_luffa.Tpo -c -o sha3/minerd-sph_luffa.o `test -f 'sha3/sph_luffa.c' || echo '$(srcdir)/'`sha3/sph_luffa.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_luffa.Tpo sha3/$(DEPDIR)/minerd-sph_luffa.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_luffa.c' object='sha3/minerd-sph_luffa.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_luffa.o `test -f 'sha3/sph_luffa.c' || echo '$(srcdir)/'`sha3/sph_luffa.c
-
-sha3/minerd-sph_luffa.obj: sha3/sph_luffa.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_luffa.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_luffa.Tpo -c -o sha3/minerd-sph_luffa.obj `if test -f 'sha3/sph_luffa.c'; then $(CYGPATH_W) 'sha3/sph_luffa.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_luffa.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_luffa.Tpo sha3/$(DEPDIR)/minerd-sph_luffa.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_luffa.c' object='sha3/minerd-sph_luffa.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_luffa.obj `if test -f 'sha3/sph_luffa.c'; then $(CYGPATH_W) 'sha3/sph_luffa.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_luffa.c'; fi`
-
-sha3/minerd-sph_cubehash.o: sha3/sph_cubehash.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_cubehash.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_cubehash.Tpo -c -o sha3/minerd-sph_cubehash.o `test -f 'sha3/sph_cubehash.c' || echo '$(srcdir)/'`sha3/sph_cubehash.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_cubehash.Tpo sha3/$(DEPDIR)/minerd-sph_cubehash.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_cubehash.c' object='sha3/minerd-sph_cubehash.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_cubehash.o `test -f 'sha3/sph_cubehash.c' || echo '$(srcdir)/'`sha3/sph_cubehash.c
-
-sha3/minerd-sph_cubehash.obj: sha3/sph_cubehash.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_cubehash.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_cubehash.Tpo -c -o sha3/minerd-sph_cubehash.obj `if test -f 'sha3/sph_cubehash.c'; then $(CYGPATH_W) 'sha3/sph_cubehash.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_cubehash.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_cubehash.Tpo sha3/$(DEPDIR)/minerd-sph_cubehash.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_cubehash.c' object='sha3/minerd-sph_cubehash.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_cubehash.obj `if test -f 'sha3/sph_cubehash.c'; then $(CYGPATH_W) 'sha3/sph_cubehash.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_cubehash.c'; fi`
-
-sha3/minerd-sph_simd.o: sha3/sph_simd.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_simd.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_simd.Tpo -c -o sha3/minerd-sph_simd.o `test -f 'sha3/sph_simd.c' || echo '$(srcdir)/'`sha3/sph_simd.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_simd.Tpo sha3/$(DEPDIR)/minerd-sph_simd.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_simd.c' object='sha3/minerd-sph_simd.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_simd.o `test -f 'sha3/sph_simd.c' || echo '$(srcdir)/'`sha3/sph_simd.c
-
-sha3/minerd-sph_simd.obj: sha3/sph_simd.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_simd.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_simd.Tpo -c -o sha3/minerd-sph_simd.obj `if test -f 'sha3/sph_simd.c'; then $(CYGPATH_W) 'sha3/sph_simd.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_simd.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_simd.Tpo sha3/$(DEPDIR)/minerd-sph_simd.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_simd.c' object='sha3/minerd-sph_simd.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_simd.obj `if test -f 'sha3/sph_simd.c'; then $(CYGPATH_W) 'sha3/sph_simd.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_simd.c'; fi`
-
-sha3/minerd-sph_echo.o: sha3/sph_echo.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_echo.o -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_echo.Tpo -c -o sha3/minerd-sph_echo.o `test -f 'sha3/sph_echo.c' || echo '$(srcdir)/'`sha3/sph_echo.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_echo.Tpo sha3/$(DEPDIR)/minerd-sph_echo.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_echo.c' object='sha3/minerd-sph_echo.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_echo.o `test -f 'sha3/sph_echo.c' || echo '$(srcdir)/'`sha3/sph_echo.c
-
-sha3/minerd-sph_echo.obj: sha3/sph_echo.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT sha3/minerd-sph_echo.obj -MD -MP -MF sha3/$(DEPDIR)/minerd-sph_echo.Tpo -c -o sha3/minerd-sph_echo.obj `if test -f 'sha3/sph_echo.c'; then $(CYGPATH_W) 'sha3/sph_echo.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_echo.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) sha3/$(DEPDIR)/minerd-sph_echo.Tpo sha3/$(DEPDIR)/minerd-sph_echo.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='sha3/sph_echo.c' object='sha3/minerd-sph_echo.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o sha3/minerd-sph_echo.obj `if test -f 'sha3/sph_echo.c'; then $(CYGPATH_W) 'sha3/sph_echo.c'; else $(CYGPATH_W) '$(srcdir)/sha3/sph_echo.c'; fi`
-
-crypto/minerd-oaes_lib.o: crypto/oaes_lib.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT crypto/minerd-oaes_lib.o -MD -MP -MF crypto/$(DEPDIR)/minerd-oaes_lib.Tpo -c -o crypto/minerd-oaes_lib.o `test -f 'crypto/oaes_lib.c' || echo '$(srcdir)/'`crypto/oaes_lib.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) crypto/$(DEPDIR)/minerd-oaes_lib.Tpo crypto/$(DEPDIR)/minerd-oaes_lib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='crypto/oaes_lib.c' object='crypto/minerd-oaes_lib.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o crypto/minerd-oaes_lib.o `test -f 'crypto/oaes_lib.c' || echo '$(srcdir)/'`crypto/oaes_lib.c
-
-crypto/minerd-oaes_lib.obj: crypto/oaes_lib.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT crypto/minerd-oaes_lib.obj -MD -MP -MF crypto/$(DEPDIR)/minerd-oaes_lib.Tpo -c -o crypto/minerd-oaes_lib.obj `if test -f 'crypto/oaes_lib.c'; then $(CYGPATH_W) 'crypto/oaes_lib.c'; else $(CYGPATH_W) '$(srcdir)/crypto/oaes_lib.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) crypto/$(DEPDIR)/minerd-oaes_lib.Tpo crypto/$(DEPDIR)/minerd-oaes_lib.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='crypto/oaes_lib.c' object='crypto/minerd-oaes_lib.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -c -o crypto/minerd-oaes_lib.obj `if test -f 'crypto/oaes_lib.c'; then $(CYGPATH_W) 'crypto/oaes_lib.c'; else $(CYGPATH_W) '$(srcdir)/crypto/oaes_lib.c'; fi`
 
 crypto/minerd-c_keccak.o: crypto/c_keccak.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(minerd_CPPFLAGS) $(CPPFLAGS) $(minerd_CFLAGS) $(CFLAGS) -MT crypto/minerd-c_keccak.o -MD -MP -MF crypto/$(DEPDIR)/minerd-c_keccak.Tpo -c -o crypto/minerd-c_keccak.o `test -f 'crypto/c_keccak.c' || echo '$(srcdir)/'`crypto/c_keccak.c
@@ -1623,8 +1085,6 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f crypto/$(DEPDIR)/$(am__dirstamp)
 	-rm -f crypto/$(am__dirstamp)
-	-rm -f sha3/$(DEPDIR)/$(am__dirstamp)
-	-rm -f sha3/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1635,7 +1095,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR) crypto/$(DEPDIR) sha3/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) crypto/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -1683,7 +1143,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR) crypto/$(DEPDIR) sha3/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) crypto/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

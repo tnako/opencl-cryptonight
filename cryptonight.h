@@ -2,7 +2,6 @@
 #define __CRYPTONIGHT_H_INCLUDED
 
 #include "crypto/hash-ops.h"
-#include "crypto/oaes_lib.h"
 #include "miner.h"
 
 #define MEMORY         (1 << 21) /* 2 MiB */
@@ -22,20 +21,6 @@ union cn_slow_hash_state {
 };
 #pragma pack(pop)
 
-#ifdef USE_LOBOTOMIZED_AES
-
-struct cryptonight_ctx {
-    uint8_t long_state[MEMORY] __attribute((aligned(16)));
-    union cn_slow_hash_state state;
-    uint8_t text[INIT_SIZE_BYTE] __attribute((aligned(16)));
-    uint8_t a[AES_BLOCK_SIZE] __attribute__((aligned(16)));
-    uint8_t b[AES_BLOCK_SIZE] __attribute__((aligned(16)));
-    uint8_t c[AES_BLOCK_SIZE] __attribute__((aligned(16)));
-    oaes_ctx* aes_ctx;
-};
-
-#else
-
 struct cryptonight_ctx {
     uint8_t long_state[MEMORY] __attribute((aligned(16)));
     union cn_slow_hash_state state;
@@ -45,10 +30,7 @@ struct cryptonight_ctx {
     uint8_t c[AES_BLOCK_SIZE] __attribute__((aligned(16)));
     uint8_t AESKey1[256];
     uint8_t AESKey2[256];
-    oaes_ctx* aes_ctx;
 };
-
-#endif
 
 void do_blake_hash(const void* input, size_t len, char* output);
 void do_groestl_hash(const void* input, size_t len, char* output);
