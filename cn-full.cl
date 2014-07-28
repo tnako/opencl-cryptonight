@@ -1,6 +1,3 @@
-#define USE_FAST_IMPL
-//#define USE_SLOW_IMPL
-
 __constant static const uint AESTable1[256] =
 {
 	0xA56363C6,0x847C7CF8,0x997777EE,0x8D7B7BF6,0x0DF2F2FF,0xBD6B6BD6,0xB16F6FDE,0x54C5C591,
@@ -163,16 +160,7 @@ __constant uchar sbox[256] =
 	0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e,
 	0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
 	0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16
-};
-
-
-__constant uchar rcon[52] =
-{
-	0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36, 0x6c, 0xd8, 0xab, 0x4d, 0x9a, 
-	0x2f, 0x5e, 0xbc, 0x63, 0xc6, 0x97, 0x35, 0x6a, 0xd4, 0xb3, 0x7d, 0xfa, 0xef, 0xc5, 0x91, 0x39,
-	0x72, 0xe4, 0xd3, 0xbd, 0x61, 0xc2, 0x9f, 0x25, 0x4a, 0x94, 0x33, 0x66, 0xcc, 0x83, 0x1d, 0x3a, 
-	0x74, 0xe8, 0xcb, 0x8d
-};
+}; 
 
 __constant ulong keccakf_rndc[24] =
 {
@@ -187,18 +175,20 @@ __constant ulong keccakf_rndc[24] =
 };
 
 #define rotl64_1(x, y) ((x) << (y) | ((x) >> (64 - (y))))
-#define rotl64_2(x, y) rotl64_1(((x) >> 32) | ((x) << 32), (y))
 
-void ExpandAES256Key(uint *output)
+void ExpandAES256Key(uint *Output, uint *Input)
 {
 	__private int i;
+	__private const uchar rcon[8] = { 0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40 };
 	
-	for(i = 8; i < 60; i++)
+	for(i = 0; i < 8; ++i) Output[i] = Input[i];
+	
+	for(; i < 40; ++i)
 	{
 		__private uchar4 temp2;
-		__private uint temp = output[i - 1];
+		__private uint temp = Output[i - 1];
 		
-		if(!(i % 8))
+		if(!(i & 7))
 		{
 			temp = (temp >> 8) | (temp << 24);
 			temp2 = as_uchar4(temp);
@@ -210,7 +200,7 @@ void ExpandAES256Key(uint *output)
 			temp2.x ^= rcon[(i >> 3)];
 			temp = as_uint(temp2);
 		}
-		else if((i % 8) == 4)
+		else if((i & 7) == 4)
 		{
 			temp2 = as_uchar4(temp);
 			temp2.x = sbox[temp2.x];
@@ -220,32 +210,20 @@ void ExpandAES256Key(uint *output)
 			temp = as_uint(temp2);
 		}
 		
-		output[i] = output[i - 8] ^ temp;
-		mem_fence(CLK_GLOBAL_MEM_FENCE);
+		Output[i] = Output[i - 8] ^ temp;
 	}
 }
 
-#ifdef USE_SLOW_IMPL
-void AES256Round(uint4 *aesoutput, ulong2 aesinput, uint4 ExpandedKey)
+void AES256Round(uint *Output, const ulong *Input, const uint *ExpandedKey)
 {
-	uchar16 temp = as_uchar16(aesinput);
-	(*aesoutput).x = AESTable1[temp.s0] ^ AESTable2[temp.s5] ^ AESTable3[temp.sa] ^ AESTable4[temp.sf] ^ ExpandedKey.x;
-	(*aesoutput).y = AESTable4[temp.s3] ^ AESTable1[temp.s4] ^ AESTable2[temp.s9] ^ AESTable3[temp.se] ^ ExpandedKey.y;
-	(*aesoutput).z = AESTable3[temp.s2] ^ AESTable4[temp.s7] ^ AESTable1[temp.s8] ^ AESTable2[temp.sd] ^ ExpandedKey.z;
-	(*aesoutput).w = AESTable2[temp.s1] ^ AESTable3[temp.s6] ^ AESTable4[temp.sb] ^ AESTable1[temp.sc] ^ ExpandedKey.w;
+	uchar *temp = (uchar *)Input;
+	Output[0] = AESTable1[temp[0]] ^ AESTable2[temp[5]] ^ AESTable3[temp[10]] ^ AESTable4[temp[15]] ^ ExpandedKey[0];
+	Output[1] = AESTable4[temp[3]] ^ AESTable1[temp[4]] ^ AESTable2[temp[9]] ^ AESTable3[temp[14]] ^ ExpandedKey[1];
+	Output[2] = AESTable3[temp[2]] ^ AESTable4[temp[7]] ^ AESTable1[temp[8]] ^ AESTable2[temp[13]] ^ ExpandedKey[2];
+	Output[3] = AESTable2[temp[1]] ^ AESTable3[temp[6]] ^ AESTable4[temp[11]] ^ AESTable1[temp[12]] ^ ExpandedKey[3];
 }
 
-void AES256RoundInPlace(uint4 *aesinout, uint *ExpandedKey)
-{
-	uchar16 temp = as_uchar16(*aesinout);
-	(*aesinout).x = AESTable1[temp.s0] ^ AESTable2[temp.s5] ^ AESTable3[temp.sa] ^ AESTable4[temp.sf] ^ ExpandedKey[0];
-	(*aesinout).y = AESTable4[temp.s3] ^ AESTable1[temp.s4] ^ AESTable2[temp.s9] ^ AESTable3[temp.se] ^ ExpandedKey[1];
-	(*aesinout).z = AESTable3[temp.s2] ^ AESTable4[temp.s7] ^ AESTable1[temp.s8] ^ AESTable2[temp.sd] ^ ExpandedKey[2];
-	(*aesinout).w = AESTable2[temp.s1] ^ AESTable3[temp.s6] ^ AESTable4[temp.sb] ^ AESTable1[temp.sc] ^ ExpandedKey[3];
-}
-
-#else
-void AES256RoundInPlace2(ulong *Input, const uint *Key)
+void AES256RoundInPlace(ulong *Input, const uint *Key)
 {
 	uchar tmp[16];
 	
@@ -257,98 +235,73 @@ void AES256RoundInPlace2(ulong *Input, const uint *Key)
 	Input[2] = AESTable3[tmp[2]] ^ AESTable4[tmp[7]] ^ AESTable1[tmp[8]] ^ AESTable2[tmp[13]] ^ Key[2];
 	Input[3] = AESTable2[tmp[1]] ^ AESTable3[tmp[6]] ^ AESTable4[tmp[11]] ^ AESTable1[tmp[12]] ^ Key[3];
 }
-#endif
 
-void CopyBlock(ulong *dst, const ulong *src)
-{
-	dst[0] = src[0];
-	dst[1] = src[1];
-}
+void CopyBlock(ulong *dst, const ulong *src) { dst[0] = src[0]; dst[1] = src[1]; }
+void XORBlocks(ulong *dst, const ulong *src) { dst[0] ^= src[0]; dst[1] ^= src[1]; }
 
-void XORBlocksInPlace(ulong *dst, const ulong *src)
+void keccakf(ulong *s)
 {
-	dst[0] ^= src[0];
-	dst[1] ^= src[1];
-}
-
-/*void MulAddXor(ulong2 *a, ulong2 *c, __global ulong2 *dst)
-{
-	ulong hi, lo;
-	hi = mad_hi((*a).x, (*dst).x, (*c).x);
-	lo = (*a).x * (*dst).x + (*c).y;
+    int i;
+    ulong bc[5], tmp0, tmp1;
 	
-	(*c).x = (*dst).x ^ hi;
-	(*c).y = (*dst).y ^ lo;
-	(*dst).x = hi;
-	(*dst).y = lo;
-}*/
-
-void keccakf(ulong s[25])
-{
-    int round;
-    ulong bc[7];
-
-    for (round = 0; round < 24; ++round) 
+	for(i = 0; i < 24; ++i)
     {
         bc[0] = s[0] ^ s[5] ^ s[10] ^ s[15] ^ s[20] ^ rotl64_1(s[2] ^ s[7] ^ s[12] ^ s[17] ^ s[22], 1);
         bc[1] = s[1] ^ s[6] ^ s[11] ^ s[16] ^ s[21] ^ rotl64_1(s[3] ^ s[8] ^ s[13] ^ s[18] ^ s[23], 1);
         bc[2] = s[2] ^ s[7] ^ s[12] ^ s[17] ^ s[22] ^ rotl64_1(s[4] ^ s[9] ^ s[14] ^ s[19] ^ s[24], 1);
         bc[3] = s[3] ^ s[8] ^ s[13] ^ s[18] ^ s[23] ^ rotl64_1(s[0] ^ s[5] ^ s[10] ^ s[15] ^ s[20], 1);
         bc[4] = s[4] ^ s[9] ^ s[14] ^ s[19] ^ s[24] ^ rotl64_1(s[1] ^ s[6] ^ s[11] ^ s[16] ^ s[21], 1);
-        bc[5] = s[1] ^ bc[0];
+        tmp0 = s[1] ^ bc[0];
         
         s[0] ^= bc[4];
-        s[1] = rotl64_2(s[6] ^ bc[0], 12);
+        s[1] = rotl64_1(s[6] ^ bc[0], 44);
         s[6] = rotl64_1(s[9] ^ bc[3], 20);
-        s[9] = rotl64_2(s[22] ^ bc[1], 29);
-        s[22] = rotl64_2(s[14] ^ bc[3], 7);
+        s[9] = rotl64_1(s[22] ^ bc[1], 61);
+        s[22] = rotl64_1(s[14] ^ bc[3], 39);
         s[14] = rotl64_1(s[20] ^ bc[4], 18);
-        s[20] = rotl64_2(s[2] ^ bc[1], 30);
-        s[2] = rotl64_2(s[12] ^ bc[1], 11);
+        s[20] = rotl64_1(s[2] ^ bc[1], 62);
+        s[2] = rotl64_1(s[12] ^ bc[1], 43);
         s[12] = rotl64_1(s[13] ^ bc[2], 25);
         s[13] = rotl64_1(s[19] ^ bc[3], 8);
-        s[19] = rotl64_2(s[23] ^ bc[2], 24);
-        s[23] = rotl64_2(s[15] ^ bc[4], 9);
+        s[19] = rotl64_1(s[23] ^ bc[2], 56);
+        s[23] = rotl64_1(s[15] ^ bc[4], 41);
         s[15] = rotl64_1(s[4] ^ bc[3], 27);
         s[4] = rotl64_1(s[24] ^ bc[3], 14);
         s[24] = rotl64_1(s[21] ^ bc[0], 2);
-        s[21] = rotl64_2(s[8] ^ bc[2], 23);
-        s[8] = rotl64_2(s[16] ^ bc[0], 13);
-        s[16] = rotl64_2(s[5] ^ bc[4], 4);
+        s[21] = rotl64_1(s[8] ^ bc[2], 55);
+        s[8] = rotl64_1(s[16] ^ bc[0], 45);
+        s[16] = rotl64_1(s[5] ^ bc[4], 36);
         s[5] = rotl64_1(s[3] ^ bc[2], 28);
         s[3] = rotl64_1(s[18] ^ bc[2], 21);
         s[18] = rotl64_1(s[17] ^ bc[1], 15);
         s[17] = rotl64_1(s[11] ^ bc[0], 10);
         s[11] = rotl64_1(s[7] ^ bc[1], 6);
         s[7] = rotl64_1(s[10] ^ bc[4], 3);
-        s[10] = rotl64_1(bc[5], 1);
+        s[10] = rotl64_1(tmp0, 1);
         
-        bc[5] = s[0]; bc[6] = s[1]; s[0] = bitselect(s[0] ^ s[2], s[0], s[1]); s[1] = bitselect(s[1] ^ s[3], s[1], s[2]); s[2] = bitselect(s[2] ^ s[4], s[2], s[3]); s[3] = bitselect(s[3] ^ bc[5], s[3], s[4]); s[4] = bitselect(s[4] ^ bc[6], s[4], bc[5]);
-        bc[5] = s[5]; bc[6] = s[6]; s[5] = bitselect(s[5] ^ s[7], s[5], s[6]); s[6] = bitselect(s[6] ^ s[8], s[6], s[7]); s[7] = bitselect(s[7] ^ s[9], s[7], s[8]); s[8] = bitselect(s[8] ^ bc[5], s[8], s[9]); s[9] = bitselect(s[9] ^ bc[6], s[9], bc[5]);
-        bc[5] = s[10]; bc[6] = s[11]; s[10] = bitselect(s[10] ^ s[12], s[10], s[11]); s[11] = bitselect(s[11] ^ s[13], s[11], s[12]); s[12] = bitselect(s[12] ^ s[14], s[12], s[13]); s[13] = bitselect(s[13] ^ bc[5], s[13], s[14]); s[14] = bitselect(s[14] ^ bc[6], s[14], bc[5]);
-        bc[5] = s[15]; bc[6] = s[16]; s[15] = bitselect(s[15] ^ s[17], s[15], s[16]); s[16] = bitselect(s[16] ^ s[18], s[16], s[17]); s[17] = bitselect(s[17] ^ s[19], s[17], s[18]); s[18] = bitselect(s[18] ^ bc[5], s[18], s[19]); s[19] = bitselect(s[19] ^ bc[6], s[19], bc[5]);
-        bc[5] = s[20]; bc[6] = s[21]; s[20] = bitselect(s[20] ^ s[22], s[20], s[21]); s[21] = bitselect(s[21] ^ s[23], s[21], s[22]); s[22] = bitselect(s[22] ^ s[24], s[22], s[23]); s[23] = bitselect(s[23] ^ bc[5], s[23], s[24]); s[24] = bitselect(s[24] ^ bc[6], s[24], bc[5]);
-        s[0] ^= keccakf_rndc[round];
+        tmp0 = s[0]; tmp1 = s[1]; s[0] = bitselect(s[0] ^ s[2], s[0], s[1]); s[1] = bitselect(s[1] ^ s[3], s[1], s[2]); s[2] = bitselect(s[2] ^ s[4], s[2], s[3]); s[3] = bitselect(s[3] ^ tmp0, s[3], s[4]); s[4] = bitselect(s[4] ^ tmp1, s[4], tmp0);
+        tmp0 = s[5]; tmp1 = s[6]; s[5] = bitselect(s[5] ^ s[7], s[5], s[6]); s[6] = bitselect(s[6] ^ s[8], s[6], s[7]); s[7] = bitselect(s[7] ^ s[9], s[7], s[8]); s[8] = bitselect(s[8] ^ tmp0, s[8], s[9]); s[9] = bitselect(s[9] ^ tmp1, s[9], tmp0);
+        tmp0 = s[10]; tmp1 = s[11]; s[10] = bitselect(s[10] ^ s[12], s[10], s[11]); s[11] = bitselect(s[11] ^ s[13], s[11], s[12]); s[12] = bitselect(s[12] ^ s[14], s[12], s[13]); s[13] = bitselect(s[13] ^ tmp0, s[13], s[14]); s[14] = bitselect(s[14] ^ tmp1, s[14], tmp0);
+        tmp0 = s[15]; tmp1 = s[16]; s[15] = bitselect(s[15] ^ s[17], s[15], s[16]); s[16] = bitselect(s[16] ^ s[18], s[16], s[17]); s[17] = bitselect(s[17] ^ s[19], s[17], s[18]); s[18] = bitselect(s[18] ^ tmp0, s[18], s[19]); s[19] = bitselect(s[19] ^ tmp1, s[19], tmp0);
+        tmp0 = s[20]; tmp1 = s[21]; s[20] = bitselect(s[20] ^ s[22], s[20], s[21]); s[21] = bitselect(s[21] ^ s[23], s[21], s[22]); s[22] = bitselect(s[22] ^ s[24], s[22], s[23]); s[23] = bitselect(s[23] ^ tmp0, s[23], s[24]); s[24] = bitselect(s[24] ^ tmp1, s[24], tmp0);
+        s[0] ^= keccakf_rndc[i];
     }
 }
 
-void keccak(__global uint *in, uchar *md)
+void keccak(uchar *md, __global uint *in)
 {
 	ulong st[25];
-    int i = 76, x;
-
-    for(x = 0; x < 19; x++) ((uint *)st)[x] = in[x];
-    
-    ((uchar *)st)[i++] = 1;
-    
-    //memset(&((uint8_t *)st)[i], 0, sizeof(state_t) - i);
-    for(x = 0; x < (200 - i); x++) ((uchar *)st)[i + x] = 0;
-    ((uchar *)st)[136 - 1] |= 0x80;
-
+	uint i;
+	
+	for(i = 0; i < 19; ++i) ((uint *)st)[i] = in[i];
+	for(i = 10; i < 25; ++i) st[i] = 0;
+	
+	st[9] = (st[9] & 0x00000000FFFFFFFFUL) | 0x0000000100000000UL;
+	st[16] = 0x8000000000000000UL;
+	
 	keccakf(st);
 	
-    //for(x = 0; x < 25; x++) md[x] = st[x];
-    for(x = 0; x < 200; x++) md[x] = ((uchar *)st)[x];
+	for(i = 0; i < 200; ++i) md[i] = ((uchar *)st)[i];
 }
 
 union __attribute__ ((packed)) hash_state
@@ -369,142 +322,49 @@ union __attribute__ ((packed)) cn_slow_hash_state
 // ctx->a and ctx->b we'll need
 __kernel void aes(__global union cn_slow_hash_state *goutput, __global uint *input, __global ulong *long_state)
 {
-	__private uint i, j, x, gid, lid, aeskey1[64], aeskey2[64];
+	__private uint i, j, gid, aeskey1[64], aeskey2[64];
 	__private union cn_slow_hash_state state;
+	__private ulong a[2], b[2], output[16];
+		
+	keccak(state.hs.b, input);
 	
-	#ifdef USE_SLOW_IMPL
-	__private uint4 output[8];
-	__private ulong2 a, b;
-	#else
-	__private ulong output[16];
-	__private ulong a[2], b[2];
-	#endif
+	ExpandAES256Key(aeskey1, (uint *)state.hs.b);
+	ExpandAES256Key(aeskey2, (uint *)&state.hs.b[32]);
 	
-	keccak(input, state.hs.b);
+	a[0] = ((ulong *)state.k)[0] ^ ((ulong *)state.k)[4];
+	b[0] = ((ulong *)state.k)[2] ^ ((ulong *)state.k)[6];
 	
-	for(i = 0; i < 8; i++) aeskey1[i] = ((uint *)state.hs.b)[i];
-	for(i = 0; i < 8; i++) aeskey2[i] = ((uint *)state.hs.b)[i + 8];
-	
-	ExpandAES256Key(aeskey1);
-	ExpandAES256Key(aeskey2);
-	
-	#ifdef USE_FAST_IMPL
-	for(i = 0; i < 2; i++)
-	{
-		a[i] = ((ulong *)state.k)[i] ^ ((ulong *)state.k)[i + 4];
-		b[i] = ((ulong *)state.k)[i + 2] ^ ((ulong *)state.k)[i + 6];
-	}
-	#else
-	a.x = ((ulong *)state.k)[0] ^ ((ulong *)state.k)[4];
-	b.x = ((ulong *)state.k)[2] ^ ((ulong *)state.k)[6];
-	
-	a.y = ((ulong *)state.k)[1] ^ ((ulong *)state.k)[5];
-	b.y = ((ulong *)state.k)[3] ^ ((ulong *)state.k)[7];
-	#endif
+	a[1] = ((ulong *)state.k)[1] ^ ((ulong *)state.k)[5];
+	b[1] = ((ulong *)state.k)[3] ^ ((ulong *)state.k)[7];
 	
 	// memcpy to ctx->text
-	#ifdef USE_SLOW_IMPL
-	for(i = 0; i < 8; i++) output[i] = vload4(0, &((uint *)state.init)[i]);
-	#else
-	for(i = 0; i < 16; i++) output[i] = ((ulong *)state.init)[i];
-	#endif
-	
-	#ifdef USE_SLOW_IMPL
-	for(i = 0; i < 0x200000; i += 128)
-	{
-		for(j = 0; j < 10; j++)
-		{
-			AES256RoundInPlace(&output[0], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[1], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[2], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[3], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[4], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[5], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[6], &aeskey1[j << 2]);
-			AES256RoundInPlace(&output[7], &aeskey1[j << 2]);
-		}
+	for(i = 0; i < 16; ++i) output[i] = ((ulong *)state.init)[i];
 		
-		for(j = 0; j < 16; j += 2)
-		{
-			long_state[(i >> 3) + j] = as_ulong(output[j >> 1].xy);
-			long_state[(i >> 3) + j + 1] = as_ulong(output[j >> 1].zw);
-		}
-	}
-	#else
-	for(i = 0; i < 0x80000; i += 32)
+	for(i = 0; i < 0x40000; i += 16)
 	{
 		for(j = 0; j < 40; j += 4)
 		{
-			AES256RoundInPlace2(&output[0], &aeskey1[j]);
-			AES256RoundInPlace2(&output[2], &aeskey1[j]);
-			AES256RoundInPlace2(&output[4], &aeskey1[j]);
-			AES256RoundInPlace2(&output[6], &aeskey1[j]);
-			AES256RoundInPlace2(&output[8], &aeskey1[j]);
-			AES256RoundInPlace2(&output[10], &aeskey1[j]);
-			AES256RoundInPlace2(&output[12], &aeskey1[j]);
-			AES256RoundInPlace2(&output[14], &aeskey1[j]);
+			AES256RoundInPlace(&output[0], &aeskey1[j]);
+			AES256RoundInPlace(&output[2], &aeskey1[j]);
+			AES256RoundInPlace(&output[4], &aeskey1[j]);
+			AES256RoundInPlace(&output[6], &aeskey1[j]);
+			AES256RoundInPlace(&output[8], &aeskey1[j]);
+			AES256RoundInPlace(&output[10], &aeskey1[j]);
+			AES256RoundInPlace(&output[12], &aeskey1[j]);
+			AES256RoundInPlace(&output[14], &aeskey1[j]);
 		}
 		
 		for(j = 0; j < 16; ++j)
-			long_state[(i >> 1) + j] = output[j];
+			long_state[i + j] = output[j];
 	}
-	#endif
-	
-	#ifdef USE_SLOW_IMPL
-	for(i = 0; i < 0x40000; i++)
-	{
-		__private ulong hi, lo, aindx, bindx, cindx;
-		__private ulong2 c, tmp;
-		__private uint4 tmp2;
 		
-		aindx = (a.x & 0x1FFFF0) >> 3;
-		tmp = vload2(0, &long_state[aindx]);
-		tmp2 = as_uint4(c);
-		
-		AES256Round(&tmp2, tmp, as_uint4(a));
-		
-		c = as_ulong2(tmp2);
-		cindx = (c.x & 0x1FFFF0) >> 3;
-		long_state[aindx] = b.x ^ c.x;
-		long_state[aindx + 1] = b.y ^ c.y;
-		
-		hi= mad_hi(c.x, long_state[cindx], a.x);
-		lo = (c.x * long_state[cindx]) + a.y;
-		a.x = long_state[cindx] ^ hi;
-		a.y = long_state[(cindx) + 1] ^ lo;
-		long_state[cindx] = hi;
-		long_state[(cindx) + 1] = lo;
-		
-		aindx = (a.x & 0x1FFFF0) >> 3;
-		tmp = vload2(0, &long_state[aindx]);
-		
-		tmp2 = as_uint4(b);
-		
-		AES256Round(&tmp2, tmp, as_uint4(a));
-		
-		b = as_ulong2(tmp2);
-		
-		bindx = (b.x & 0x1FFFF0) >> 3;
-		
-		long_state[aindx] = b.x ^ c.x;
-		long_state[aindx + 1] = b.y ^ c.y;
-		
-		hi = mad_hi(b.x, long_state[bindx], a.x);
-		lo = (b.x * long_state[bindx]) + a.y;
-		a.x = long_state[bindx] ^ hi;
-		a.y = long_state[bindx + 1] ^ lo;
-		long_state[bindx] = hi;
-		long_state[bindx + 1] = lo;
-	}
-	#else
-	for(i = 0; i < 0x80000; i++)
+	for(i = 0; i < 0x80000; ++i)
 	{
 		ulong c[2];
 		uint aindx = (a[0] & 0x1FFFF0) >> 3;
-		CopyBlock(c, &long_state[aindx]);
-		
-		AES256RoundInPlace2(c, (uint *)a);
-		XORBlocksInPlace(b, c);
+				
+		AES256Round((uint *)c, &long_state[aindx], (uint *)a);
+		XORBlocks(b, c);
 		CopyBlock(&long_state[aindx], b);
 		
 		ulong b2[2];
@@ -516,71 +376,35 @@ __kernel void aes(__global union cn_slow_hash_state *goutput, __global uint *inp
 		
 		CopyBlock(&long_state[cindx], a);
 		
-		XORBlocksInPlace(a, b2);
+		XORBlocks(a, b2);
 		CopyBlock(b, c);
 	}
-	#endif
-	
-	// memcpy to ctx->text
-	#ifdef USE_SLOW_IMPL
-	for(i = 0; i < 8; i++) output[i] = vload4(0, &((uint *)state.init)[i]);
-	#else
-	for(i = 0; i < 16; i++) output[i] = ((ulong *)state.init)[i];
-	#endif
-	
-	#ifdef USE_SLOW_IMPL
-	for(i = 0; i < 0x200000; i += 128)
-	{
-		for(j = 0; j < 16; j += 2)
-		{
-			output[j >> 1].xy ^= as_uint2(long_state[(i >> 3) + j]).xy;
-			output[j >> 1].zw ^= as_uint2(long_state[(i >> 3) + j + 1]).xy;
-		}
 		
-		for(j = 0; j < 10; j++)
-		{
-			AES256RoundInPlace(&output[0], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[1], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[2], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[3], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[4], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[5], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[6], &aeskey2[j << 2]);
-			AES256RoundInPlace(&output[7], &aeskey2[j << 2]);
-		}
-	}
-	for(i = 0; i < 16; i += 2)
-	{
-		((ulong *)state.init)[i] = as_ulong(output[i >> 1].xy);
-		((ulong *)state.init)[i + 1] = as_ulong(output[i >> 1].zw);
-	}
-	#else
-	for(i = 0; i < 0x80000; i += 32)
+	// memcpy to ctx->text
+	for(i = 0; i < 16; ++i) output[i] = ((ulong *)state.init)[i];
+		
+	for(i = 0; i < 0x40000; i += 16)
 	{
 		for(j = 0; j < 16; ++j)
-			output[j] ^= long_state[(i >> 1) + j];
+			output[j] ^= long_state[i + j];
 		
 		for(j = 0; j < 40; j += 4)
 		{
-			AES256RoundInPlace2(&output[0], &aeskey2[j]);
-			AES256RoundInPlace2(&output[2], &aeskey2[j]);
-			AES256RoundInPlace2(&output[4], &aeskey2[j]);
-			AES256RoundInPlace2(&output[6], &aeskey2[j]);
-			AES256RoundInPlace2(&output[8], &aeskey2[j]);
-			AES256RoundInPlace2(&output[10], &aeskey2[j]);
-			AES256RoundInPlace2(&output[12], &aeskey2[j]);
-			AES256RoundInPlace2(&output[14], &aeskey2[j]);
+			AES256RoundInPlace(&output[0], &aeskey2[j]);
+			AES256RoundInPlace(&output[2], &aeskey2[j]);
+			AES256RoundInPlace(&output[4], &aeskey2[j]);
+			AES256RoundInPlace(&output[6], &aeskey2[j]);
+			AES256RoundInPlace(&output[8], &aeskey2[j]);
+			AES256RoundInPlace(&output[10], &aeskey2[j]);
+			AES256RoundInPlace(&output[12], &aeskey2[j]);
+			AES256RoundInPlace(&output[14], &aeskey2[j]);
 		}
 	}
 	
 	for(i = 0; i < 16; ++i)
-	{
 		((ulong *)state.init)[i] = output[i];
-	}
-	#endif
-	
+			
 	keccakf(&state.hs);
 	
-	//for(i = 0; i < sizeof(union cn_slow_hash_state); i++) ((uchar *)goutput)[i] = ((uchar *)&state)[i];
 	*goutput = state;
 }
