@@ -363,18 +363,18 @@ __kernel void aes(__global union cn_slow_hash_state *goutput, __global uint *inp
 		ulong c[2];
 		uint aindx = (a[0] & 0x1FFFF0) >> 3;
 				
-		AES256Round((uint *)c, &long_state[aindx], (uint *)a);
+		AES256Round((uint *)c, (ulong *)&long_state[aindx], (uint *)a);
 		XORBlocks(b, c);
-		CopyBlock(&long_state[aindx], b);
+		CopyBlock((ulong *)&long_state[aindx], b);
 		
 		ulong b2[2];
 		uint cindx = (c[0] & 0x1FFFF0) >> 3;
-		CopyBlock(b2, &long_state[cindx]);
+		CopyBlock(b2, (ulong *)&long_state[cindx]);
 		
 		a[0] += mul_hi(c[0], b2[0]);
 		a[1] += c[0] * b2[0];
 		
-		CopyBlock(&long_state[cindx], a);
+		CopyBlock((ulong *)&long_state[cindx], a);
 		
 		XORBlocks(a, b2);
 		CopyBlock(b, c);
@@ -404,7 +404,7 @@ __kernel void aes(__global union cn_slow_hash_state *goutput, __global uint *inp
 	for(i = 0; i < 16; ++i)
 		((ulong *)state.init)[i] = output[i];
 			
-	keccakf(&state.hs);
+	keccakf((ulong *)&state.hs);
 	
 	*goutput = state;
 }

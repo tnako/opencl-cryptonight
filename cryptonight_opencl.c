@@ -39,7 +39,7 @@ unsigned char do_gpu(void *output, uint8_t *input)
 			exit(0);
 		}
 		
-		err = clGetDeviceIDs(pid, CL_DEVICE_TYPE_CPU, 1, &devid, &devs);
+		err = clGetDeviceIDs(pid, CL_DEVICE_TYPE_GPU, 1, &devid, &devs);
 		
 		if(err != CL_SUCCESS)
 		{
